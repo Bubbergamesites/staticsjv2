@@ -280,7 +280,7 @@ function createTab(makeActive = true) {
     const tab = {
         id: nextTabId++,
         title: "New Tab",
-        url: "https://pluto.tv/",
+        url: "NT.html",
         frame,
         loading: false,
         favicon: null,
@@ -288,7 +288,7 @@ function createTab(makeActive = true) {
         loadStartTime: null
     };
 
-    frame.frame.src = "https://pluto.tv/";
+    frame.frame.src = "NT.html";
 
     frame.addEventListener("urlchange", (e) => {
         tab.url = e.url;
@@ -333,7 +333,7 @@ function createTab(makeActive = true) {
             if (title) tab.title = title;
         } catch { }
 
-        if (frame.frame.contentWindow.location.href.includes('https://pluto.tv/')) {
+        if (frame.frame.contentWindow.location.href.includes('NT.html')) {
             tab.title = "New Tab";
             tab.url = "";
             tab.favicon = null;
@@ -437,7 +437,7 @@ function updateAddressBar() {
     const bar = document.getElementById("address-bar");
     const tab = getActiveTab();
     if (bar && tab) {
-        bar.value = (tab.url && !tab.url.includes("https://pluto.tv/")) ? tab.url : "";
+        bar.value = (tab.url && !tab.url.includes("NT.html")) ? tab.url : "";
     }
 }
 

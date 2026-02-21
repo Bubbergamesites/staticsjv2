@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
+    <style>
     html, body {
         margin: 0;
         padding: 0;
@@ -171,25 +171,17 @@
         <div class="shortcut-icon"><img src="https://www.youtube.com/favicon.ico"></div>
         <span class="shortcut-label">YouTube</span>
       </a>
-       <a class="shortcut" data-url="https://spotify.com">
-        <div class="shortcut-icon"><i class="fa-brands fa-spotify"></i></div>
-        <span class="shortcut-label">Spotify</span>
-      </a>
-      <a class="shortcut" data-url="https://pluto.tv/">
-        <div class="shortcut-icon"><img src="https://cdn.theorg.com/a250f7c7-8d93-487f-bc35-69a5e2145115_medium.jpg"></div>
-        <span class="shortcut-label">Pluto TV</span>
-      </a>
-     
+
+      <div id="customShortcuts" style="display: contents;"></div>
+
       <div class="shortcut" id="uploadBtn">
         <div class="shortcut-icon"><i class="fa-solid fa-image"></i></div>
         <span class="shortcut-label">Set BG</span>
       </div>
-
       <div class="shortcut" id="resetBtn">
         <div class="shortcut-icon"><i class="fa-solid fa-rotate-left"></i></div>
         <span class="shortcut-label">Reset BG</span>
       </div>
-
       <div class="shortcut" id="addShortcut">
         <div class="shortcut-icon"><i class="fa-solid fa-plus"></i></div>
         <span class="shortcut-label">Add</span>
@@ -205,21 +197,21 @@
     const $ = s => document.querySelector(s);
     const bgUpload = $('#bgUpload');
 
-    // Default background setting
-    function loadBackground() {
-      const savedBg = localStorage.getItem('customBg');
-      if (savedBg) {
-        document.body.style.backgroundImage = `url(${savedBg})`;
-      } else {
-        document.body.style.backgroundImage = "url('nexus.jpg')"; // Default
-      }
-    }
-    loadBackground();
-
+    // Restore Proxy Navigation
     const nav = url => {
       $('#loader').classList.add('show');
-      window.location.href = url;
+      if (window.parent !== window) {
+          window.parent.postMessage({ type: 'navigate', url }, '*');
+      } else {
+          window.location.href = url;
+      }
     };
+
+    function loadBackground() {
+      const savedBg = localStorage.getItem('customBg');
+      document.body.style.backgroundImage = savedBg ? `url(${savedBg})` : "url('nexus.jpg')";
+    }
+    loadBackground();
 
     function updateClock() {
       const now = new Date();
@@ -242,13 +234,12 @@
       const resetBtn = e.target.closest('#resetBtn');
 
       if (shortcut) {
-        e.preventDefault();
         nav(shortcut.dataset.url);
       } else if (uploadBtn) {
         bgUpload.click();
       } else if (resetBtn) {
-        localStorage.removeItem('customBg'); // Clear custom choice
-        loadBackground(); // Reverts to nexus.jpg
+        localStorage.removeItem('customBg');
+        loadBackground();
       } else if (addBtn) {
         const name = prompt("Shortcut name:");
         let url = name ? prompt("URL:") : null;
@@ -272,7 +263,7 @@
           try {
             localStorage.setItem('customBg', imgData);
           } catch (err) {
-            alert("Image too large for browser storage!");
+            alert("Image too large! Try a smaller file.");
           }
         };
         reader.readAsDataURL(file);
@@ -280,14 +271,15 @@
     };
 
     function renderCustom() {
-      document.querySelectorAll('.custom-shortcut').forEach(e => e.remove());
+      const container = $('#customShortcuts');
+      container.innerHTML = '';
       const shortcuts = JSON.parse(localStorage.getItem('shortcuts') || '[]');
       shortcuts.forEach(s => {
         const div = document.createElement('div');
-        div.className = 'shortcut custom-shortcut';
+        div.className = 'shortcut';
         div.dataset.url = s.url;
         div.innerHTML = `<div class="shortcut-icon"><i class="fa-solid fa-link"></i></div><span class="shortcut-label">${s.name}</span>`;
-        $('#addShortcut').before(div);
+        container.appendChild(div);
       });
     }
 

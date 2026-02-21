@@ -12,29 +12,34 @@
         margin: 0;
         padding: 0;
         min-height: 100vh;
+        width: 100%;
         font-family: 'Nunito', sans-serif;
-        background: url('nexus.jpg') no-repeat center center fixed;
-        background-size: cover;
+        background-color: #1a1a1a;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover; /* Ensures image is full screen */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         color: #000;
+        transition: background 0.3s ease-in-out;
     }
 
     .glass-panel {
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         padding: 40px 60px;
         border-radius: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         text-align: center;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         width: 90%;
         max-width: 700px;
+        background: rgba(255, 255, 255, 0.15);
     }
 
-    /* Brand Header */
     h1 {
         font-size: 4rem;
         margin: 0;
@@ -44,27 +49,9 @@
         text-transform: uppercase;
     }
 
-    /* Merged Time and Date container */
-    .time-container {
-        margin: 10px 0 30px 0;
-    }
-
-    .clock {
-        font-size: 3rem;
-        font-weight: 700;
-        margin: 0;
-        color: #1a1a1a;
-        line-height: 1;
-    }
-
-    .date {
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        font-weight: 700;
-        opacity: 0.6;
-        margin-top: 5px;
-    }
+    .time-container { margin: 10px 0 30px 0; }
+    .clock { font-size: 3rem; font-weight: 700; color: #1a1a1a; }
+    .date { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; opacity: 0.7; }
 
     .search-container {
         display: flex;
@@ -79,11 +66,10 @@
         padding: 15px 25px;
         border-radius: 50px;
         border: 3px solid #1a1a1a;
-        background: transparent;
+        background: rgba(255, 255, 255, 0.2);
         color: #1a1a1a;
         font-size: 1.1rem;
         outline: none;
-        font-family: 'Nunito', sans-serif;
     }
 
     #engine {
@@ -94,14 +80,13 @@
         border: none;
         border-radius: 20px;
         padding: 5px 10px;
-        font-size: 0.8rem;
         cursor: pointer;
     }
 
     .shortcuts {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 15px;
         width: 100%;
     }
 
@@ -112,41 +97,28 @@
         gap: 8px;
         text-decoration: none;
         color: #1a1a1a;
+        cursor: pointer;
         transition: transform 0.2s;
     }
 
     .shortcut:hover { transform: translateY(-5px); }
 
     .shortcut-icon {
-        width: 55px;
-        height: 55px;
+        width: 50px;
+        height: 50px;
         border: 2px solid #1a1a1a;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
-        background: rgba(255,255,255,0.2);
+        font-size: 1.1rem;
+        background: rgba(255,255,255,0.3);
     }
 
-    .shortcut-icon img {
-        width: 24px;
-        height: 24px;
-    }
+    .shortcut-icon img { width: 24px; height: 24px; border-radius: 4px; }
+    .shortcut-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; text-align: center; }
 
-    .shortcut-label {
-        font-size: 0.7rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .quote {
-        margin-top: 30px;
-        font-size: 0.9rem;
-        font-style: italic;
-        opacity: 0.6;
-    }
+    .quote { margin-top: 30px; font-size: 0.9rem; font-style: italic; opacity: 0.7; }
 
     .loader {
         position: fixed;
@@ -199,14 +171,25 @@
         <div class="shortcut-icon"><img src="https://www.youtube.com/favicon.ico"></div>
         <span class="shortcut-label">YouTube</span>
       </a>
-      <a class="shortcut" data-url="https://open.spotify.com/">
-        <div class="shortcut-icon"><img src="https://open.spotify.com/favicon.ico"></div>
+       <a class="shortcut" data-url="https://spotify.com">
+        <div class="shortcut-icon"><i class="fa-brands fa-spotify"></i></div>
         <span class="shortcut-label">Spotify</span>
       </a>
       <a class="shortcut" data-url="https://pluto.tv/">
         <div class="shortcut-icon"><img src="https://cdn.theorg.com/a250f7c7-8d93-487f-bc35-69a5e2145115_medium.jpg"></div>
         <span class="shortcut-label">Pluto TV</span>
       </a>
+     
+      <div class="shortcut" id="uploadBtn">
+        <div class="shortcut-icon"><i class="fa-solid fa-image"></i></div>
+        <span class="shortcut-label">Set BG</span>
+      </div>
+
+      <div class="shortcut" id="resetBtn">
+        <div class="shortcut-icon"><i class="fa-solid fa-rotate-left"></i></div>
+        <span class="shortcut-label">Reset BG</span>
+      </div>
+
       <div class="shortcut" id="addShortcut">
         <div class="shortcut-icon"><i class="fa-solid fa-plus"></i></div>
         <span class="shortcut-label">Add</span>
@@ -216,20 +199,30 @@
     <div class="quote" id="quote"></div>
   </div>
 
+  <input type="file" id="bgUpload" accept="image/*" style="display: none;">
+
   <script>
     const $ = s => document.querySelector(s);
+    const bgUpload = $('#bgUpload');
+
+    // Default background setting
+    function loadBackground() {
+      const savedBg = localStorage.getItem('customBg');
+      if (savedBg) {
+        document.body.style.backgroundImage = `url(${savedBg})`;
+      } else {
+        document.body.style.backgroundImage = "url('nexus.jpg')"; // Default
+      }
+    }
+    loadBackground();
+
     const nav = url => {
       $('#loader').classList.add('show');
-      if (window.parent !== window) {
-          window.parent.postMessage({ type: 'navigate', url }, '*');
-      } else {
-          window.location.href = url;
-      }
+      window.location.href = url;
     };
 
     function updateClock() {
       const now = new Date();
-      // Changed to hour12: true for a more common new tab feel, but kept formatting clean
       $('#clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
       $('#date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
     }
@@ -245,9 +238,16 @@
     $('#shortcuts').onclick = e => {
       const shortcut = e.target.closest('.shortcut[data-url]');
       const addBtn = e.target.closest('#addShortcut');
+      const uploadBtn = e.target.closest('#uploadBtn');
+      const resetBtn = e.target.closest('#resetBtn');
+
       if (shortcut) {
-        e.preventDefault();
         nav(shortcut.dataset.url);
+      } else if (uploadBtn) {
+        bgUpload.click();
+      } else if (resetBtn) {
+        localStorage.removeItem('customBg'); // Clear custom choice
+        loadBackground(); // Reverts to nexus.jpg
       } else if (addBtn) {
         const name = prompt("Shortcut name:");
         let url = name ? prompt("URL:") : null;
@@ -258,6 +258,23 @@
           localStorage.setItem('shortcuts', JSON.stringify(shortcuts));
           renderCustom();
         }
+      }
+    };
+
+    bgUpload.onchange = e => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imgData = event.target.result;
+          document.body.style.backgroundImage = `url(${imgData})`;
+          try {
+            localStorage.setItem('customBg', imgData);
+          } catch (err) {
+            alert("Image too large for browser storage!");
+          }
+        };
+        reader.readAsDataURL(file);
       }
     };
 
@@ -273,7 +290,7 @@
       });
     }
 
-    const quotes = ["Gaming Paradise", "Made by Bubber", "Bro just do your work", "Best Browser awarded by me", "What are you doing here?"];
+    const quotes = ["Gaming Paradise", "Made by Bubber", "Bro just do your work", "Best Browser awarded by me"];
     $('#quote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
     renderCustom();
   </script>
